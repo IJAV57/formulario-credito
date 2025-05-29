@@ -796,5 +796,98 @@
             
             const requiredFiles = ['csf-titular', 'id-titular', 'banco-titular', 'dom-titular'];
             const allFilesUploaded = requiredFiles.every(req => uploadedFiles[req]);
-            
-            const requiredInputs = document.querySelectorAll('#formFisica input[require
+            const requiredInputs = document.querySelectorAll('#formFisica input[required], #formFisica textarea[required]');
+            let allInputsFilled = true;
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allInputsFilled = false;
+                }
+            });
+
+            // Si todos los archivos requeridos y campos están completos, habilita el botón
+            document.getElementById('submitBtn').disabled = !(allFilesUploaded && allInputsFilled);
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            let alertClass = 'alert-info';
+            if (type === 'error') alertClass = 'alert-error';
+            if (type === 'success') alertClass = 'alert-success';
+            alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 4000);
+        }
+
+        async function submitForm() {
+            if (!supabaseClient) {
+                showAlert('Conéctate a Supabase antes de enviar la solicitud.', 'error');
+                return;
+            }
+            if (!selectedType) {
+                showAlert('Selecciona un tipo de solicitante.', 'error');
+                return;
+            }
+
+            // Recolectar datos personales
+            const datosPersonales = {
+                nombre: document.getElementById('nombreTitular').value.trim(),
+                rfc: document.getElementById('rfcTitular').value.trim(),
+                telefono: document.getElementById('telefonoTitular').value.trim(),
+                email: document.getElementById('emailTitular').value.trim(),
+                direccion: document.getElementById('direccionTitular').value.trim(),
+            };
+
+            // Recolectar información de documentos (solo guardamos nombre del archivo)
+            const documentos = {};
+            for (const key of ['csf-titular', 'id-titular', 'banco-titular', 'dom-titular']) {
+                if (uploadedFiles[key]) {
+                    documentos[key] = uploadedFiles[key].name;
+                }
+            }
+
+            // Insertar en la base de datos
+            try {
+                const { data, error } = await supabaseClient
+                    .from('solicitudes')
+                    .insert([{
+                        tipo_solicitante: selectedType,
+                        datos_personales: datosPersonales,
+                        documentos: documentos,
+                        fecha_creacion: new Date().toISOString()
+                    }]);
+                if (error) throw error;
+
+                showAlert('Solicitud guardada exitosamente.', 'success');
+                // Restablecer formulario
+                resetForm();
+            } catch (error) {
+                showAlert('Error guardando la solicitud: ' + error.message, 'error');
+            }
+        }
+
+        function resetForm() {
+            // Limpiar campos de texto
+            document.querySelectorAll('#formFisica input, #formFisica textarea').forEach(input => {
+                input.value = '';
+            });
+            // Limpiar archivos subidos y resultados OCR
+            for (const key of ['csf-titular', 'id-titular', 'banco-titular', 'dom-titular']) {
+                document.getElementById(`files-${key}`).innerHTML = '';
+                const ocr = document.getElementById(`ocr-results-${key}`);
+                if (ocr) ocr.classList.add('hidden');
+            }
+            uploadedFiles = {};
+            extractedData = {};
+            updateProgress();
+            checkFormCompletion();
+        }
+
+        // Validación en tiempo real
+        document.addEventListener('input', () => {
+            checkFormCompletion();
+        });
+    </script>
+</body>
+</html>
+                                        
