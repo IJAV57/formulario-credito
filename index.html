@@ -494,3 +494,307 @@
             </button>
         </div>
     </div>
+    <script>
+        // Variables globales
+        let supabaseClient = null;
+        let selectedType = '';
+        let uploadedFiles = {};
+        let extractedData = {};
+        
+        // Inicializar Supabase
+        async function initializeSupabase() {
+            const url = document.getElementById('supabaseUrl').value;
+            const key = document.getElementById('supabaseKey').value;
+            const statusDiv = document.getElementById('connectionStatus');
+            
+            if (!url || !key) {
+                showAlert('Por favor ingresa la URL y API Key de Supabase', 'error');
+                return;
+            }
+            
+            try {
+                supabaseClient = supabase.createClient(url, key);
+                
+                // Probar la conexión
+                const { data, error } = await supabaseClient.from('solicitudes').select('*').limit(1);
+                
+                if (error && error.code !== 'PGRST116') { // PGRST116 = tabla no existe, pero conexión OK
+                    throw error;
+                }
+                
+                statusDiv.innerHTML = '<div class="alert alert-success">✅ Conexión exitosa a Supabase</div>';
+                await createTablesIfNotExist();
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="alert alert-error">❌ Error de conexión: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+        
+        // Crear tablas si no existen
+        async function createTablesIfNotExist() {
+            // En un entorno real, crearías las tablas desde el panel de Supabase
+            // Aquí solo verificamos que podemos hacer queries
+            try {
+                const { data, error } = await supabaseClient
+                    .from('solicitudes')
+                    .select('*')
+                    .limit(1);
+                    
+                if (error && error.code === 'PGRST116') {
+                    showAlert('⚠️ Tabla "solicitudes" no existe. Créala en el panel de Supabase con estos campos: id, tipo_solicitante, datos_personales, documentos, fecha_creacion', 'info');
+                }
+            } catch (error) {
+                console.error('Error verificando tablas:', error);
+            }
+        }
+        
+        function selectType(type) {
+            selectedType = type;
+            
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.type-card').classList.add('selected');
+            
+            document.getElementById('formFisica').classList.toggle('hidden', type !== 'fisica');
+            
+            uploadedFiles = {};
+            extractedData = {};
+            updateProgress();
+            checkFormCompletion();
+        }
+        
+        function validateFile(file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            
+            let errors = [];
+            
+            if (file.size > maxSize) {
+                errors.push('El archivo excede el tamaño máximo de 10MB');
+            }
+            
+            if (!allowedTypes.includes(file.type)) {
+                errors.push('Tipo de archivo no permitido. Solo se aceptan PDF, JPG, PNG');
+            }
+            
+            return errors;
+        }
+        
+        async function handleFileUpload(input, fileType) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const container = document.getElementById(`files-${fileType}`);
+            const errors = validateFile(file);
+            
+            if (errors.length > 0) {
+                showAlert(`Error en ${file.name}: ${errors.join(', ')}`, 'error');
+                return;
+            }
+            
+            // Mostrar archivo subido
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item processing';
+            fileItem.innerHTML = `
+                <span>🔄 ${file.name} - Procesando...</span>
+                <button class="remove-file" onclick="removeFile('${fileType}', '${file.name}')">Eliminar</button>
+            `;
+            container.innerHTML = '';
+            container.appendChild(fileItem);
+            
+            // Guardar archivo en Supabase Storage
+            if (supabaseClient) {
+                await uploadToSupabase(file, fileType);
+            }
+            
+            // Procesar con OCR
+            await processWithOCR(file, fileType);
+            
+            // Actualizar estado
+            fileItem.className = 'file-item success';
+            fileItem.innerHTML = `
+                <span>✅ ${file.name} - OCR procesado</span>
+                <button class="remove-file" onclick="removeFile('${fileType}', '${file.name}')">Eliminar</button>
+            `;
+            
+            uploadedFiles[fileType] = file;
+            updateProgress();
+            checkFormCompletion();
+        }
+        
+        async function uploadToSupabase(file, fileType) {
+            if (!supabaseClient) return;
+            
+            try {
+                const fileName = `${Date.now()}-${file.name}`;
+                const { data, error } = await supabaseClient.storage
+                    .from('documentos')
+                    .upload(fileName, file);
+                
+                if (error) throw error;
+                
+                console.log('Archivo subido a Supabase:', data);
+                return data;
+            } catch (error) {
+                console.error('Error subiendo a Supabase:', error);
+                showAlert('Error subiendo archivo a la nube', 'error');
+            }
+        }
+        
+        async function processWithOCR(file, fileType) {
+            const progressContainer = document.querySelector(`#files-${fileType}`).closest('.form-group').querySelector('.ocr-progress');
+            const progressText = progressContainer.querySelector('small');
+            const resultsContainer = document.getElementById(`ocr-results-${fileType}`);
+            const extractedContainer = document.getElementById(`extracted-data-${fileType}`);
+            
+            progressContainer.classList.add('active');
+            
+            try {
+                const { data: { text } } = await Tesseract.recognize(
+                    file,
+                    'spa', // Español
+                    {
+                        logger: m => {
+                            if (m.status === 'recognizing text') {
+                                const progress = Math.round(m.progress * 100);
+                                progressText.textContent = `${progress}%`;
+                            }
+                        }
+                    }
+                );
+                
+                // Extraer datos específicos según el tipo de documento
+                const extracted = extractDataFromText(text, fileType);
+                extractedData[fileType] = { text, extracted };
+                
+                // Mostrar resultados
+                if (resultsContainer && extractedContainer) {
+                    resultsContainer.classList.remove('hidden');
+                    extractedContainer.innerHTML = createExtractedDataHTML(extracted, fileType);
+                }
+                
+                showAlert(`OCR completado para ${fileType}. Datos extraídos automáticamente.`, 'success');
+                
+            } catch (error) {
+                console.error('Error en OCR:', error);
+                showAlert('Error procesando OCR. El archivo se guardó pero no se pudo extraer texto.', 'error');
+            } finally {
+                progressContainer.classList.remove('active');
+            }
+        }
+        
+        function extractDataFromText(text, fileType) {
+            const extracted = {};
+            
+            if (fileType === 'csf-titular') {
+                // Extraer RFC
+                const rfcMatch = text.match(/([A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3})/);
+                if (rfcMatch) extracted.rfc = rfcMatch[1];
+                
+                // Extraer nombre
+                const nameMatch = text.match(/CONTRIBUYENTE[\s\n]+([A-ZÁÉÍÓÚÑ\s]+)/);
+                if (nameMatch) extracted.nombre = nameMatch[1].trim();
+                
+                // Extraer dirección
+                const addressMatch = text.match(/DOMICILIO[\s\n]+([A-ZÁÉÍÓÚÑ0-9\s,\.]+)/);
+                if (addressMatch) extracted.direccion = addressMatch[1].trim();
+            }
+            
+            if (fileType === 'id-titular') {
+                // Extraer nombre de INE/IFE
+                const nameMatch = text.match(/([A-ZÁÉÍÓÚÑ]+\s+[A-ZÁÉÍÓÚÑ]+\s+[A-ZÁÉÍÓÚÑ]+)/);
+                if (nameMatch) extracted.nombre = nameMatch[1].trim();
+                
+                // Extraer CURP
+                const curpMatch = text.match(/([A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9]{2})/);
+                if (curpMatch) extracted.curp = curpMatch[1];
+                
+                // Extraer fecha de nacimiento
+                const dateMatch = text.match(/([0-9]{2}\/[0-9]{2}\/[0-9]{4})/);
+                if (dateMatch) extracted.fechaNacimiento = dateMatch[1];
+            }
+            
+            return extracted;
+        }
+        
+        function createExtractedDataHTML(extracted, fileType) {
+            let html = '<div style="margin-bottom: 10px;">';
+            
+            Object.entries(extracted).forEach(([key, value]) => {
+                html += `
+                    <div style="margin-bottom: 8px;">
+                        <strong>${key}:</strong> ${value}
+                        <button class="auto-fill-btn" onclick="autoFillField('${key}', '${value}')">
+                            Auto-rellenar
+                        </button>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function autoFillField(fieldType, value) {
+            const fieldMappings = {
+                'rfc': 'rfcTitular',
+                'nombre': 'nombreTitular',
+                'direccion': 'direccionTitular',
+                'curp': 'curpTitular',
+                'fechaNacimiento': 'fechaNacimientoTitular'
+            };
+            
+            const fieldId = fieldMappings[fieldType];
+            if (fieldId) {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.value = value;
+                    field.style.backgroundColor = '#e8f5e8';
+                    setTimeout(() => {
+                        field.style.backgroundColor = '';
+                    }, 2000);
+                    
+                    showAlert(`Campo ${fieldType} rellenado automáticamente`, 'success');
+                    checkFormCompletion();
+                }
+            }
+        }
+        
+        function removeFile(fileType, fileName) {
+            delete uploadedFiles[fileType];
+            delete extractedData[fileType];
+            
+            const container = document.getElementById(`files-${fileType}`);
+            container.innerHTML = '';
+            
+            const resultsContainer = document.getElementById(`ocr-results-${fileType}`);
+            if (resultsContainer) {
+                resultsContainer.classList.add('hidden');
+            }
+            
+            updateProgress();
+            checkFormCompletion();
+        }
+        
+        function updateProgress() {
+            if (!selectedType) return;
+            
+            const requiredFiles = ['csf-titular', 'id-titular', 'banco-titular', 'dom-titular'];
+            const completed = requiredFiles.filter(req => uploadedFiles[req]).length;
+            const progress = (completed / requiredFiles.length) * 100;
+            
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+        
+        function checkFormCompletion() {
+            if (!selectedType) {
+                document.getElementById('submitBtn').disabled = true;
+                return;
+            }
+            
+            const requiredFiles = ['csf-titular', 'id-titular', 'banco-titular', 'dom-titular'];
+            const allFilesUploaded = requiredFiles.every(req => uploadedFiles[req]);
+            
+            const requiredInputs = document.querySelectorAll('#formFisica input[require
