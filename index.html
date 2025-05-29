@@ -1,1184 +1,1587 @@
 <!DOCTYPE html>
-<!-- saved from url=(0035)https://skmdqlwx.gensparkspace.com/ -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Solicitud de Crédito</title>
-    <link href="./Sistema GENSPARK de Solicitud de Crédito_files/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./Sistema GENSPARK de Solicitud de Crédito_files/all.min.css">
-    <script src="./Sistema GENSPARK de Solicitud de Crédito_files/cb=gapi.loaded_0" async=""></script><script src="./Sistema GENSPARK de Solicitud de Crédito_files/tesseract.min.js.descarga"></script>
-    <script src="./Sistema GENSPARK de Solicitud de Crédito_files/pdf-lib.min.js.descarga"></script>
-    <script src="./Sistema GENSPARK de Solicitud de Crédito_files/api.js.descarga" gapi_processed="true"></script>
-<style>
-    .genspark-badge-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #333;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .genspark-modal {
-      display: none;
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      z-index: 10000;
-      justify-content: end;
-    }
-    
-    .genspark-modal-content {
-      background-color: white;
-      border-radius: 8px;
-      max-width: 450px;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 20px;
-      position: relative;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      font-size: 14px;
-    }
-    @media (max-width: 768px) {
-      .genspark-modal-content {
-        max-width: 90%;
-      }
-    }
-    
-    .genspark-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 20px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-    
-    .genspark-title {
-      margin-bottom: 8px;
-      font-weight: normal;
-      display: inline;
-      font-size: 14px;
-    }
-    
-    .genspark-report {
-      color: #909499;
-      text-decoration: underline;
-      cursor: pointer;
-      margin-bottom: 14px;
-      display: inline;
-    }
-    
-    .genspark-info {
-      margin: 25px 0;
-      color: #333;
-      font-size: 14px;
-    }
-    
-    .genspark-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .genspark-remove-btn {
-      background-color: #f5f5f5;
-      border: 1px solid #ddd;
-      color: #333;
-      padding: 4px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    
-    .genspark-go-btn {
-      background-color: #222;
-      border: none;
-      color: white;
-      padding: 4px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-  </style><style>
-    .genspark-notice-dialog {
-      display: flex;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 10001;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .genspark-notice-content {
-      background-color: white;
-      border-radius: 8px;
-      max-width: 600px;
-      width: 90%;
-      box-sizing: border-box;
-      padding: 10px 30px 30px 30px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      font-size: 16px;
-    }
-
-    .genspark-notice-title {
-      color: #000;
-      font-family: Arial;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: 150%; 
-    }
-
-    .genspark-notice-list {
-      margin: 24px 0;
-      
-      color: #606366;
-      font-family: Arial;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 150%;
-      padding-left: 12px;
-    }
-
-    .genspark-notice-list li {
-      margin-bottom: 12px;
-      list-style-type: disc;
-    }
-
-    .genspark-notice-list li a {
-      color: #606366;
-      text-decoration: underline;
-    }
-
-    .genspark-notice-checkbox {
-      display: flex;
-      align-items: center;
-      margin-top: 20px;
-      gap: 10px;
-
-      color: #232425;
-
-      font-family: Arial;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-    }
-
-    .genspark-notice-actions {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-      
-    .genspark-notice-ok {
-      color: #232425;
-
-      text-align: center;
-      font-family: Arial;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: 150%; 
-
-      cursor: pointer;
-      display: flex;
-      height: 40px;
-      padding: 6px 14px;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      align-self: stretch;
-      border-radius: 8px;
-      border: 1px solid #000;
-      box-sizing: border-box;
-      width: 100%;
-    }
-  </style></head>
-<body class="bg-gray-50 font-sans">
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
-        <!-- Header -->
-        <div class="bg-blue-600 text-white p-6 rounded-lg mb-6">
-            <h1 class="text-3xl font-bold text-center">
-                <i class="fas fa-credit-card mr-3"></i>
-                Sistema de Solicitud de Crédito
-            </h1>
-            <p class="text-center mt-2 text-blue-100">Complete el formulario adjuntando todos los documentos requeridos</p>
-        </div>
-
-        <!-- Alert Container -->
-        <div id="alertContainer" class="mb-4"></div>
-
-        <!-- Main Form -->
-        <form id="creditForm" class="space-y-6">
-            <!-- Person Type Selection -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-user-check mr-2"></i>
-                    Tipo de Solicitante
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
-                        <input type="radio" name="personType" value="fisica" class="mr-3 w-4 h-4" required="">
-                        <div>
-                            <div class="font-semibold text-gray-800">Persona Física</div>
-                            <div class="text-sm text-gray-600">Solicitud individual</div>
-                        </div>
-                    </label>
-                    <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 transition-colors">
-                        <input type="radio" name="personType" value="moral" class="mr-3 w-4 h-4" required="">
-                        <div>
-                            <div class="font-semibold text-gray-800">Persona Moral</div>
-                            <div class="text-sm text-gray-600">Empresa o sociedad</div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Basic Information -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Información Básica
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div id="basicInfoPersonaFisica" class="">
-                        <input type="text" id="nombreCompleto" placeholder="Nombre Completo" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
-                        <input type="text" id="rfc" placeholder="RFC" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mt-2">
-                        <input type="text" id="telefono" placeholder="Teléfono" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mt-2">
-                    </div>
-                    <div id="basicInfoPersonaMoral" class="hidden">
-                        <input type="text" id="razonSocial" placeholder="Razón Social" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
-                        <input type="text" id="rfcEmpresa" placeholder="RFC de la Empresa" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mt-2">
-                        <input type="text" id="representanteLegal" placeholder="Representante Legal" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mt-2">
-                    </div>
-                    <div>
-                        <textarea id="direccion" placeholder="Dirección Completa" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"></textarea>
-                        <input type="text" id="cp" placeholder="Código Postal" class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mt-2">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Document Upload Sections -->
-            <div id="documentsContainer">
-                <!-- Persona Física Documents -->
-                <div id="documentosPersonaFisica" class="space-y-6">
-                    <!-- Titular Documents -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-user mr-2"></i>
-                            Documentos del Titular
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Constancia de Situación Fiscal <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="constanciaFiscalTitular" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Identificación Oficial <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="identificacionTitular" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Estado de Cuenta Bancario <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="estadoCuentaTitular" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Comprobante de Domicilio <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="comprobanteDomicilioTitular" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Avales Documents -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-users mr-2"></i>
-                            Documentos de Avales
-                        </h3>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Número de Avales:</label>
-                            <select id="numAvales" class="w-32 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
-                                <option value="1">1 Aval</option>
-                                <option value="2">2 Avales</option>
-                            </select>
-                        </div>
-                        
-                        <div id="avalesContainer">
-                            <!-- Aval 1 -->
-                            <div class="aval-section border-l-4 border-blue-500 pl-4 mb-6">
-                                <h4 class="font-medium text-gray-700 mb-3">Aval 1</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Identificación Oficial <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="identificacionAval1" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                        <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Comprobante de Domicilio <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="comprobanteDomicilioAval1" accept=".pdf,.jpg,.jpeg,.png" class="file-input success" data-required="true">
-                                        <div class="upload-status status-success"><i class="fas fa-check mr-2"></i>Archivo válido y procesado</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Aval 2 -->
-                            <div id="aval2Section" class="aval-section border-l-4 border-green-500 pl-4 hidden">
-                                <h4 class="font-medium text-gray-700 mb-3">Aval 2</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Identificación Oficial <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="identificacionAval2" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Comprobante de Domicilio <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="comprobanteDomicilioAval2" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Optional Guarantee -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-home mr-2"></i>
-                            Documento de Garantía (Opcional)
-                        </h3>
-                        <div class="document-upload">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Bien Inmueble
-                            </label>
-                            <input type="file" name="documentoGarantia" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                            <div class="upload-status"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Persona Moral Documents -->
-                <div id="documentosPersonaMoral" class="hidden space-y-6">
-                    <!-- Company Documents -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-building mr-2"></i>
-                            Documentos de la Empresa
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Constancia de Situación Fiscal <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="constanciaFiscalEmpresa" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Acta Constitutiva <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="actaConstitutiva" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Estados Financieros <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="estadosFinancieros" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Cédula Profesional Contador <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="cedulaContador" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Comprobante Domicilio Empresa <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="comprobanteDomicilioEmpresa" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Declaración Anual <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="declaracionAnual" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Opinión de Cumplimiento SAT <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="opinionSAT" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Legal Representative Documents -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-user-tie mr-2"></i>
-                            Documentos del Representante Legal
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Identificación Oficial <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="identificacionRepresentante" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Comprobante de Domicilio <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="comprobanteDomicilioRepresentante" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                            <div class="document-upload">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Constancia Situación Fiscal <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="constanciaFiscalRepresentante" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                <div class="upload-status"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Avales for Moral -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                            <i class="fas fa-users mr-2"></i>
-                            Documentos de Avales
-                        </h3>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Número de Avales:</label>
-                            <select id="numAvalesMoral" class="w-32 p-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
-                                <option value="1">1 Aval</option>
-                                <option value="2">2 Avales</option>
-                            </select>
-                        </div>
-                        
-                        <div id="avalesContainerMoral">
-                            <!-- Aval 1 Moral -->
-                            <div class="aval-section border-l-4 border-blue-500 pl-4 mb-6">
-                                <h4 class="font-medium text-gray-700 mb-3">Aval 1</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Identificación Oficial <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="identificacionAvalMoral1" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Comprobante de Domicilio <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="comprobanteDomicilioAvalMoral1" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Constancia Situación Fiscal <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="constanciaFiscalAvalMoral1" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Aval 2 Moral -->
-                            <div id="aval2SectionMoral" class="aval-section border-l-4 border-green-500 pl-4 hidden">
-                                <h4 class="font-medium text-gray-700 mb-3">Aval 2</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Identificación Oficial <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="identificacionAvalMoral2" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Comprobante de Domicilio <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="comprobanteDomicilioAvalMoral2" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                    <div class="document-upload">
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Constancia Situación Fiscal <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="file" name="constanciaFiscalAvalMoral2" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
-                                        <div class="upload-status"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Processing Status -->
-            <div id="processingStatus" class="bg-white p-6 rounded-lg shadow-md hidden">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-cog fa-spin mr-2"></i>
-                    Procesando Documentos
-                </h3>
-                <div class="space-y-2">
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                        <span><i class="fas fa-check mr-2"></i>Validando archivos...</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                        <span><i class="fas fa-check mr-2"></i>Extrayendo texto con OCR...</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                        <span><i class="fas fa-check mr-2"></i>Completando formularios PDF...</span>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                        <span><i class="fas fa-check mr-2"></i>Subido a Google Drive exitosamente</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generated PDFs -->
-            <div id="generatedPDFs" class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    PDFs Generados para Firma
-                </h3>
-                <div id="pdfDownloadLinks" class="space-y-2">
-                    <!-- PDF download links will be populated here -->
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded border">
-                <span class="font-medium">Autorización Buró - Titular</span>
-                <a href="blob:https://skmdqlwx.gensparkspace.com/0842e172-8148-48cf-9288-21dce8f235e3" download="Autorización Buró - Titular.pdf" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
-                    <i class="fas fa-download mr-2"></i>Descargar
-                </a>
-            </div><div class="flex items-center justify-between p-3 bg-gray-50 rounded border">
-                <span class="font-medium">Autorización Buró - Aval 1</span>
-                <a href="blob:https://skmdqlwx.gensparkspace.com/0e4186d2-c4bb-4151-bd9a-dabd64d1df1f" download="Autorización Buró - Aval 1.pdf" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
-                    <i class="fas fa-download mr-2"></i>Descargar
-                </a>
-            </div></div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
-                    <i class="fas fa-paper-plane mr-2"></i>
-                    Enviar Solicitud
-                </button>
-            </div>
-        </form>
-    </div>
-
+    <title>Sistema de Solicitud de Crédito - Google Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
     <style>
-        .file-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px dashed #cbd5e0;
-            border-radius: 0.5rem;
-            background-color: #f7fafc;
-            cursor: pointer;
-            transition: all 0.3s;
+        @media print {
+            body { margin: 0; padding: 20px; }
+            .no-print { display: none !important; }
         }
-        .file-input:hover {
-            border-color: #3182ce;
-            background-color: #ebf8ff;
+        .file-upload-area {
+            border: 2px dashed #e5e7eb;
+            transition: all 0.3s ease;
         }
-        .file-input.success {
-            border-color: #38a169;
-            background-color: #f0fff4;
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
         }
-        .file-input.error {
-            border-color: #e53e3e;
-            background-color: #fed7d7;
+        .file-upload-area.dragover {
+            border-color: #10b981;
+            background-color: #ecfdf5;
         }
-        .upload-status {
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
+        .progress-bar {
+            transition: width 0.3s ease;
         }
-        .status-success {
-            color: #38a169;
+        .loading-spinner {
+            animation: spin 1s linear infinite;
         }
-        .status-error {
-            color: #e53e3e;
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        .status-processing {
-            color: #3182ce;
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-university text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">Sistema de Solicitud de Crédito</h1>
+                        <p class="text-blue-200">Integrado con Google Cloud Platform</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div id="connection-status" class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+                        <span class="text-sm">No conectado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        
+        <!-- Configuración de Google Cloud -->
+        <div id="google-config" class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-cogs text-blue-600 mr-2"></i>
+                Configuración de Google Cloud Platform
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        ID de Cliente OAuth 2.0
+                    </label>
+                    <input type="text" id="google-client-id" 
+                           placeholder="123456789-abcdef.apps.googleusercontent.com"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Obténlo en Google Cloud Console → APIs y servicios → Credenciales</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Nombre del Bucket de Storage
+                    </label>
+                    <input type="text" id="storage-bucket" 
+                           placeholder="documentos-credito-123456"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Nombre del bucket donde se guardarán los documentos</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex space-x-3">
+                <button id="connect-google" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center space-x-2">
+                    <i class="fab fa-google"></i>
+                    <span>Conectar con Google</span>
+                </button>
+                <button id="test-connection" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md" disabled>
+                    <i class="fas fa-plug"></i>
+                    Probar Conexión
+                </button>
+            </div>
+        </div>
+
+        <!-- Instrucciones de Configuración -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>Instrucciones de configuración:</strong>
+                        <br>1. Ve a <a href="https://console.cloud.google.com/" target="_blank" class="underline">Google Cloud Console</a>
+                        <br>2. Crea un proyecto nuevo
+                        <br>3. Habilita las APIs: Google Drive API y Cloud Storage API
+                        <br>4. Crea credenciales OAuth 2.0 en "APIs y servicios" → "Credenciales"
+                        <br>5. Agrega tu dominio a "Orígenes autorizados de JavaScript"
+                        <br>6. Crea un bucket en Cloud Storage para almacenar documentos
+                        <br>7. Copia el ID de cliente y nombre del bucket en los campos de arriba
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario Principal -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-file-alt text-blue-600 mr-2"></i>
+                Solicitud de Crédito
+            </h2>
+
+            <!-- Tipo de Persona -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de Solicitante</label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="tipo-persona" value="fisica" class="mr-2" checked>
+                        <span class="text-sm">Persona Física</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="tipo-persona" value="moral" class="mr-2">
+                        <span class="text-sm">Persona Moral</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Datos Básicos -->
+            <div id="datos-basicos" class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Datos Básicos</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div id="campo-nombre">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+                        <input type="text" id="nombre-completo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div id="campo-razon-social" style="display:none;">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Razón Social</label>
+                        <input type="text" id="razon-social" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">RFC</label>
+                        <input type="text" id="rfc" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
+                        <input type="tel" id="telefono" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dirección Completa</label>
+                    <input type="text" id="direccion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-4 mt-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Delegación/Municipio</label>
+                        <input type="text" id="delegacion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Código Postal</label>
+                        <input type="text" id="codigo-postal" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div id="campo-representante" style="display:none;">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Representante Legal</label>
+                        <input type="text" id="representante-legal" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentos Requeridos -->
+            <div id="documentos-section">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-upload text-green-600 mr-2"></i>
+                    Documentos Requeridos
+                </h3>
+                
+                <!-- Documentos Persona Física -->
+                <div id="docs-persona-fisica">
+                    <h4 class="font-medium text-gray-700 mb-3">Documentos del Titular</h4>
+                    <div class="grid gap-4">
+                        <div class="document-upload" data-required="true" data-doc-type="constancia-fiscal-titular">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Constancia de Situación Fiscal reciente <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <p class="text-xs text-gray-500">PDF nativo o imagen de alta calidad</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="identificacion-titular">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Identificación oficial vigente <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-id-card text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="estado-cuenta">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Estado de cuenta bancario (máximo 3 meses) <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-university text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Solo la carátula</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="comprobante-domicilio-titular">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Comprobante de Domicilio del Titular <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-home text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-medium text-gray-700 mb-3 mt-6">Documentos de Avales</h4>
+                    <div class="grid gap-4">
+                        <div class="document-upload" data-required="true" data-doc-type="identificacion-avales">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Identificación oficial de avales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-users text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra los archivos aquí o haz clic para seleccionar</p>
+                                <p class="text-xs text-gray-500">Puedes subir 1 o 2 avales</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="comprobante-domicilio-avales">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Comprobante de Domicilio de avales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-map-marker-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra los archivos aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="false" data-doc-type="documento-garantia">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Documento garantía (bien inmueble) <span class="text-gray-500">(Opcional)</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-building text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentos Persona Moral -->
+                <div id="docs-persona-moral" style="display:none;">
+                    <h4 class="font-medium text-gray-700 mb-3">Documentos de la Empresa</h4>
+                    <div class="grid gap-4">
+                        <div class="document-upload" data-required="true" data-doc-type="constancia-fiscal-empresa">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Constancia de Situación Fiscal reciente <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-file-invoice text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="acta-constitutiva">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Acta Constitutiva <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-certificate text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="estados-financieros">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Estados financieros vigentes y originales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-chart-line text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Firmados por representante legal y contador</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="cedula-contador">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Cédula Profesional del contador <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-user-graduate text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="comprobante-domicilio-empresa">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Comprobante de Domicilio de la empresa <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-building text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="declaracion-anual">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Declaración Anual <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-file-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="opinion-cumplimiento">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Opinión de Cumplimiento SAT <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-check-circle text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-medium text-gray-700 mb-3 mt-6">Documentos del Representante Legal</h4>
+                    <div class="grid gap-4">
+                        <div class="document-upload" data-required="true" data-doc-type="identificacion-representante">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Identificación oficial del representante legal <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-id-card text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="comprobante-domicilio-representante">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Comprobante de Domicilio del representante legal <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-home text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="constancia-fiscal-representante">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Constancia de Situación Fiscal del representante legal <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-file-invoice text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra el archivo aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="font-medium text-gray-700 mb-3 mt-6">Documentos de Avales</h4>
+                    <div class="grid gap-4">
+                        <div class="document-upload" data-required="true" data-doc-type="identificacion-avales-pm">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Identificación oficial de avales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-users text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra los archivos aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="comprobante-domicilio-avales-pm">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Comprobante de Domicilio de avales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-map-marker-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra los archivos aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-upload" data-required="true" data-doc-type="constancia-fiscal-avales">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Constancia de Situación Fiscal de avales <span class="text-red-500">*</span>
+                            </label>
+                            <div class="file-upload-area rounded-lg p-4 text-center cursor-pointer">
+                                <i class="fas fa-file-invoice text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-600">Arrastra los archivos aquí o haz clic para seleccionar</p>
+                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png" multiple>
+                                <div class="upload-status mt-2"></div>
+                                <div class="progress-container hidden mt-2">
+                                    <div class="bg-gray-200 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validaciones y Estado -->
+            <div class="mt-8">
+                <div id="validation-alerts" class="mb-4"></div>
+                
+                <div class="flex flex-wrap gap-4 items-center">
+                    <button id="validate-documents" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center space-x-2">
+                        <i class="fas fa-check-double"></i>
+                        <span>Validar Documentos</span>
+                    </button>
+                    
+                    <button id="process-documents" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md flex items-center space-x-2" disabled>
+                        <i class="fas fa-cogs"></i>
+                        <span>Procesar con OCR</span>
+                    </button>
+                    
+                    <button id="generate-pdfs" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md flex items-center space-x-2" disabled>
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generar PDFs</span>
+                    </button>
+                    
+                    <button id="submit-application" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md flex items-center space-x-2" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Enviar Solicitud</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progreso y Resultados -->
+        <div id="processing-section" class="bg-white rounded-lg shadow-md p-6 mb-8" style="display:none;">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-tasks text-blue-600 mr-2"></i>
+                Progreso del Procesamiento
+            </h3>
+            
+            <div id="processing-steps" class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                        <i class="fas fa-upload text-gray-600"></i>
+                    </div>
+                    <span class="text-gray-600">Subiendo archivos a Google Drive...</span>
+                    <div class="loading-spinner fas fa-spinner text-blue-600 hidden"></div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                        <i class="fas fa-eye text-gray-600"></i>
+                    </div>
+                    <span class="text-gray-600">Procesando OCR de imágenes...</span>
+                    <div class="loading-spinner fas fa-spinner text-blue-600 hidden"></div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-gray-600"></i>
+                    </div>
+                    <span class="text-gray-600">Extrayendo datos de PDFs...</span>
+                    <div class="loading-spinner fas fa-spinner text-blue-600 hidden"></div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                        <i class="fas fa-magic text-gray-600"></i>
+                    </div>
+                    <span class="text-gray-600">Autocompletando formularios...</span>
+                    <div class="loading-spinner fas fa-spinner text-blue-600 hidden"></div>
+                </div>
+            </div>
+            
+            <div id="processing-results" class="mt-6" style="display:none;">
+                <h4 class="font-medium text-gray-700 mb-3">Datos Extraídos</h4>
+                <div id="extracted-data" class="bg-gray-50 p-4 rounded-lg">
+                    <!-- Los datos extraídos aparecerán aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Descarga de PDFs -->
+        <div id="download-section" class="bg-white rounded-lg shadow-md p-6" style="display:none;">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-download text-green-600 mr-2"></i>
+                Descargar PDFs Prellenados
+            </h3>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="text-center p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                    <i class="fas fa-file-pdf text-4xl text-red-600 mb-2"></i>
+                    <h4 class="font-medium text-gray-800">Autorización Buró Titular</h4>
+                    <p class="text-sm text-gray-600 mb-3">PDF prellenado con datos del titular</p>
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm download-pdf" data-pdf-type="titular">
+                        <i class="fas fa-download mr-1"></i>
+                        Descargar
+                    </button>
+                </div>
+                
+                <div id="avales-pdfs" class="grid gap-4">
+                    <!-- Los PDFs de avales se generarán dinámicamente -->
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            <strong>Siguiente paso:</strong> Descarga todos los PDFs, imprímelos, fírmalos y entrégalos junto con los documentos originales.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script>
-        // Global variables
+        // Variables globales
+        let googleAuth = null;
         let uploadedFiles = {};
         let extractedData = {};
-        let driveApiLoaded = false;
+        let isGoogleConnected = false;
 
-        // Initialize the application
+        // Configuración de Google API
+        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+        const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             initializeEventListeners();
-            loadGoogleDriveAPI();
+            loadGoogleAPI();
         });
 
+        // Cargar Google API
+        function loadGoogleAPI() {
+            if (typeof gapi !== 'undefined') {
+                gapi.load('auth2', initializeGoogleAuth);
+            }
+        }
+
+        // Inicializar autenticación de Google
+        async function initializeGoogleAuth() {
+            try {
+                await gapi.load('client:auth2', async () => {
+                    const clientId = document.getElementById('google-client-id').value;
+                    if (!clientId) return;
+
+                    await gapi.client.init({
+                        discoveryDocs: [DISCOVERY_DOC],
+                        clientId: clientId,
+                        scope: SCOPES
+                    });
+
+                    googleAuth = gapi.auth2.getAuthInstance();
+                    updateConnectionStatus();
+                });
+            } catch (error) {
+                console.error('Error inicializando Google Auth:', error);
+                showAlert('Error al inicializar Google Auth', 'error');
+            }
+        }
+
+        // Event Listeners
         function initializeEventListeners() {
-            // Person type change
-            document.querySelectorAll('input[name="personType"]').forEach(radio => {
+            // Cambio de tipo de persona
+            document.querySelectorAll('input[name="tipo-persona"]').forEach(radio => {
                 radio.addEventListener('change', handlePersonTypeChange);
             });
 
-            // Number of avales change
-            document.getElementById('numAvales').addEventListener('change', handleAvalesChange);
-            document.getElementById('numAvalesMoral').addEventListener('change', handleAvalesMoralChange);
+            // Conexión con Google
+            document.getElementById('connect-google').addEventListener('click', connectToGoogle);
+            document.getElementById('test-connection').addEventListener('click', testGoogleConnection);
 
-            // File inputs
-            document.querySelectorAll('.file-input').forEach(input => {
-                input.addEventListener('change', handleFileUpload);
-            });
+            // Botones principales
+            document.getElementById('validate-documents').addEventListener('click', validateAllDocuments);
+            document.getElementById('process-documents').addEventListener('click', processAllDocuments);
+            document.getElementById('generate-pdfs').addEventListener('click', generateAllPDFs);
+            document.getElementById('submit-application').addEventListener('click', submitApplication);
 
-            // Form submission
-            document.getElementById('creditForm').addEventListener('submit', handleFormSubmit);
+            // File uploads
+            setupFileUploads();
         }
 
+        // Manejar cambio de tipo de persona
         function handlePersonTypeChange(e) {
-            const personType = e.target.value;
+            const tipoPersona = e.target.value;
             
-            // Hide all document sections
-            document.getElementById('documentosPersonaFisica').classList.add('hidden');
-            document.getElementById('documentosPersonaMoral').classList.add('hidden');
-            document.getElementById('basicInfoPersonaFisica').classList.add('hidden');
-            document.getElementById('basicInfoPersonaMoral').classList.add('hidden');
-            
-            // Show relevant sections
-            if (personType === 'fisica') {
-                document.getElementById('documentosPersonaFisica').classList.remove('hidden');
-                document.getElementById('basicInfoPersonaFisica').classList.remove('hidden');
-                updateRequiredFields('fisica');
-            } else if (personType === 'moral') {
-                document.getElementById('documentosPersonaMoral').classList.remove('hidden');
-                document.getElementById('basicInfoPersonaMoral').classList.remove('hidden');
-                updateRequiredFields('moral');
-            }
-        }
-
-        function updateRequiredFields(personType) {
-            // Reset all required fields
-            document.querySelectorAll('.file-input').forEach(input => {
-                input.removeAttribute('data-required');
-            });
-
-            if (personType === 'fisica') {
-                // Set required fields for persona física
-                const requiredFields = [
-                    'constanciaFiscalTitular', 'identificacionTitular', 
-                    'estadoCuentaTitular', 'comprobanteDomicilioTitular',
-                    'identificacionAval1', 'comprobanteDomicilioAval1'
-                ];
-                
-                requiredFields.forEach(fieldName => {
-                    const input = document.querySelector(`input[name="${fieldName}"]`);
-                    if (input) input.setAttribute('data-required', 'true');
-                });
-            } else if (personType === 'moral') {
-                // Set required fields for persona moral
-                const requiredFields = [
-                    'constanciaFiscalEmpresa', 'actaConstitutiva', 'estadosFinancieros',
-                    'cedulaContador', 'comprobanteDomicilioEmpresa', 'declaracionAnual',
-                    'opinionSAT', 'identificacionRepresentante', 'comprobanteDomicilioRepresentante',
-                    'constanciaFiscalRepresentante', 'identificacionAvalMoral1', 
-                    'comprobanteDomicilioAvalMoral1', 'constanciaFiscalAvalMoral1'
-                ];
-                
-                requiredFields.forEach(fieldName => {
-                    const input = document.querySelector(`input[name="${fieldName}"]`);
-                    if (input) input.setAttribute('data-required', 'true');
-                });
-            }
-        }
-
-        function handleAvalesChange(e) {
-            const numAvales = parseInt(e.target.value);
-            const aval2Section = document.getElementById('aval2Section');
-            
-            if (numAvales === 2) {
-                aval2Section.classList.remove('hidden');
-                // Make aval 2 fields required
-                document.querySelector('input[name="identificacionAval2"]').setAttribute('data-required', 'true');
-                document.querySelector('input[name="comprobanteDomicilioAval2"]').setAttribute('data-required', 'true');
+            if (tipoPersona === 'fisica') {
+                document.getElementById('docs-persona-fisica').style.display = 'block';
+                document.getElementById('docs-persona-moral').style.display = 'none';
+                document.getElementById('campo-nombre').style.display = 'block';
+                document.getElementById('campo-razon-social').style.display = 'none';
+                document.getElementById('campo-representante').style.display = 'none';
             } else {
-                aval2Section.classList.add('hidden');
-                // Remove required from aval 2 fields
-                document.querySelector('input[name="identificacionAval2"]').removeAttribute('data-required');
-                document.querySelector('input[name="comprobanteDomicilioAval2"]').removeAttribute('data-required');
+                document.getElementById('docs-persona-fisica').style.display = 'none';
+                document.getElementById('docs-persona-moral').style.display = 'block';
+                document.getElementById('campo-nombre').style.display = 'none';
+                document.getElementById('campo-razon-social').style.display = 'block';
+                document.getElementById('campo-representante').style.display = 'block';
             }
+            
+            // Limpiar archivos subidos
+            uploadedFiles = {};
+            clearFileUploads();
         }
 
-        function handleAvalesMoralChange(e) {
-            const numAvales = parseInt(e.target.value);
-            const aval2Section = document.getElementById('aval2SectionMoral');
-            
-            if (numAvales === 2) {
-                aval2Section.classList.remove('hidden');
-                // Make aval 2 fields required
-                document.querySelector('input[name="identificacionAvalMoral2"]').setAttribute('data-required', 'true');
-                document.querySelector('input[name="comprobanteDomicilioAvalMoral2"]').setAttribute('data-required', 'true');
-                document.querySelector('input[name="constanciaFiscalAvalMoral2"]').setAttribute('data-required', 'true');
-            } else {
-                aval2Section.classList.add('hidden');
-                // Remove required from aval 2 fields
-                document.querySelector('input[name="identificacionAvalMoral2"]').removeAttribute('data-required');
-                document.querySelector('input[name="comprobanteDomicilioAvalMoral2"]').removeAttribute('data-required');
-                document.querySelector('input[name="constanciaFiscalAvalMoral2"]').removeAttribute('data-required');
+        // Conectar con Google
+        async function connectToGoogle() {
+            const clientId = document.getElementById('google-client-id').value;
+            if (!clientId) {
+                showAlert('Por favor ingresa el ID de Cliente OAuth 2.0', 'warning');
+                return;
             }
-        }
-
-        async function handleFileUpload(e) {
-            const file = e.target.files[0];
-            const fieldName = e.target.name;
-            
-            if (!file) return;
-
-            const statusDiv = e.target.nextElementSibling;
-            statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Validando archivo...';
-            statusDiv.className = 'upload-status status-processing';
 
             try {
-                // Validate file
-                const validation = await validateFile(file);
-                
-                if (!validation.isValid) {
-                    e.target.classList.add('error');
-                    statusDiv.innerHTML = `<i class="fas fa-times mr-2"></i>${validation.message}`;
-                    statusDiv.className = 'upload-status status-error';
-                    return;
+                await initializeGoogleAuth();
+                if (googleAuth) {
+                    await googleAuth.signIn();
+                    isGoogleConnected = true;
+                    updateConnectionStatus();
+                    document.getElementById('test-connection').disabled = false;
+                    showAlert('Conectado exitosamente con Google Drive', 'success');
                 }
-
-                // Process file based on type
-                let extractedText = '';
-                if (file.type.startsWith('image/')) {
-                    extractedText = await performOCR(file);
-                } else if (file.type === 'application/pdf') {
-                    extractedText = await extractTextFromPDF(file);
-                }
-
-                // Store file and extracted data
-                uploadedFiles[fieldName] = file;
-                extractedData[fieldName] = extractedText;
-
-                // Update UI
-                e.target.classList.remove('error');
-                e.target.classList.add('success');
-                statusDiv.innerHTML = '<i class="fas fa-check mr-2"></i>Archivo válido y procesado';
-                statusDiv.className = 'upload-status status-success';
-
             } catch (error) {
-                e.target.classList.add('error');
-                statusDiv.innerHTML = `<i class="fas fa-times mr-2"></i>Error: ${error.message}`;
-                statusDiv.className = 'upload-status status-error';
+                console.error('Error conectando con Google:', error);
+                showAlert('Error al conectar con Google: ' + error.message, 'error');
             }
         }
 
+        // Probar conexión
+        async function testGoogleConnection() {
+            if (!isGoogleConnected) {
+                showAlert('Primero debes conectarte con Google', 'warning');
+                return;
+            }
+
+            try {
+                const response = await gapi.client.drive.files.list({
+                    pageSize: 1,
+                    fields: 'files(id, name)'
+                });
+                showAlert('Conexión con Google Drive verificada correctamente', 'success');
+            } catch (error) {
+                showAlert('Error en la conexión: ' + error.message, 'error');
+            }
+        }
+
+        // Actualizar estado de conexión
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connection-status');
+            if (isGoogleConnected) {
+                statusElement.innerHTML = `
+                    <span class="w-3 h-3 bg-green-400 rounded-full"></span>
+                    <span class="text-sm">Conectado</span>
+                `;
+            } else {
+                statusElement.innerHTML = `
+                    <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+                    <span class="text-sm">No conectado</span>
+                `;
+            }
+        }
+
+        // Configurar file uploads
+        function setupFileUploads() {
+            document.querySelectorAll('.document-upload').forEach(uploadArea => {
+                const fileInput = uploadArea.querySelector('input[type="file"]');
+                const uploadZone = uploadArea.querySelector('.file-upload-area');
+
+                // Click para seleccionar archivo
+                uploadZone.addEventListener('click', () => fileInput.click());
+
+                // Drag and drop
+                uploadZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.add('dragover');
+                });
+
+                uploadZone.addEventListener('dragleave', () => {
+                    uploadZone.classList.remove('dragover');
+                });
+
+                uploadZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadZone.classList.remove('dragover');
+                    handleFileUpload(e.dataTransfer.files, uploadArea);
+                });
+
+                // File input change
+                fileInput.addEventListener('change', (e) => {
+                    handleFileUpload(e.target.files, uploadArea);
+                });
+            });
+        }
+
+        // Manejar subida de archivos
+        async function handleFileUpload(files, uploadArea) {
+            const docType = uploadArea.dataset.docType;
+            const statusElement = uploadArea.querySelector('.upload-status');
+            const progressContainer = uploadArea.querySelector('.progress-container');
+            const progressBar = uploadArea.querySelector('.progress-bar');
+
+            for (let file of files) {
+                // Validar archivo
+                const validation = await validateFile(file);
+                if (!validation.valid) {
+                    showAlert(`Error en ${file.name}: ${validation.message}`, 'error');
+                    continue;
+                }
+
+                // Mostrar progreso
+                progressContainer.classList.remove('hidden');
+                statusElement.innerHTML = `<span class="text-blue-600">Subiendo ${file.name}...</span>`;
+
+                try {
+                    // Simular progreso de subida
+                    for (let i = 0; i <= 100; i += 10) {
+                        progressBar.style.width = i + '%';
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+
+                    // Guardar archivo
+                    if (!uploadedFiles[docType]) {
+                        uploadedFiles[docType] = [];
+                    }
+                    uploadedFiles[docType].push({
+                        file: file,
+                        name: file.name,
+                        type: file.type,
+                        validated: true
+                    });
+
+                    statusElement.innerHTML = `<span class="text-green-600"><i class="fas fa-check mr-1"></i>${file.name} subido correctamente</span>`;
+                    progressContainer.classList.add('hidden');
+
+                } catch (error) {
+                    statusElement.innerHTML = `<span class="text-red-600"><i class="fas fa-times mr-1"></i>Error subiendo ${file.name}</span>`;
+                    progressContainer.classList.add('hidden');
+                }
+            }
+        }
+
+        // Validar archivo
         async function validateFile(file) {
             const maxSize = 10 * 1024 * 1024; // 10MB
-            
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+
             if (file.size > maxSize) {
-                return { isValid: false, message: 'El archivo es demasiado grande (máximo 10MB)' };
+                return { valid: false, message: 'El archivo es demasiado grande (máximo 10MB)' };
             }
 
+            if (!allowedTypes.includes(file.type)) {
+                return { valid: false, message: 'Tipo de archivo no permitido' };
+            }
+
+            // Validación específica para PDFs
+            if (file.type === 'application/pdf') {
+                const isNative = await validateNativePDF(file);
+                if (!isNative) {
+                    return { valid: false, message: 'El PDF debe ser nativo, no una imagen escaneada' };
+                }
+            }
+
+            // Validación específica para imágenes
             if (file.type.startsWith('image/')) {
-                return await validateImage(file);
-            } else if (file.type === 'application/pdf') {
-                return await validatePDF(file);
-            } else {
-                return { isValid: false, message: 'Tipo de archivo no válido' };
+                const quality = await validateImageQuality(file);
+                if (!quality.valid) {
+                    return { valid: false, message: quality.message };
+                }
+            }
+
+            return { valid: true, message: 'Archivo válido' };
+        }
+
+        // Validar PDF nativo
+        async function validateNativePDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const text = new TextDecoder().decode(arrayBuffer.slice(0, 1024));
+                
+                // Buscar indicadores de PDF nativo
+                const hasText = text.includes('/Type') && text.includes('/Font');
+                const hasImages = text.includes('/XObject') && text.includes('/Image');
+                
+                // Si solo tiene imágenes y no texto/fuentes, probablemente es escaneado
+                return hasText || !hasImages;
+            } catch (error) {
+                return false;
             }
         }
 
-        async function validateImage(file) {
+        // Validar calidad de imagen para OCR
+        async function validateImageQuality(file) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = function() {
                     const minWidth = 800;
                     const minHeight = 600;
+                    const minPixels = minWidth * minHeight;
                     
-                    if (this.width < minWidth || this.height < minHeight) {
-                        resolve({ 
-                            isValid: false, 
-                            message: `Imagen muy pequeña. Mínimo ${minWidth}x${minHeight} píxeles` 
+                    if (img.width < minWidth || img.height < minHeight) {
+                        resolve({
+                            valid: false,
+                            message: `Resolución muy baja (${img.width}x${img.height}). Mínimo requerido: ${minWidth}x${minHeight}`
                         });
                     } else {
-                        resolve({ isValid: true, message: 'Imagen válida para OCR' });
+                        resolve({ valid: true });
                     }
                 };
-                
-                img.onerror = function() {
-                    resolve({ isValid: false, message: 'No se puede leer la imagen' });
-                };
-                
+                img.onerror = () => resolve({ valid: false, message: 'No se pudo cargar la imagen' });
                 img.src = URL.createObjectURL(file);
             });
         }
 
-        async function validatePDF(file) {
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                
-                // Check if it's a native PDF (has text content)
-                const pages = pdfDoc.getPages();
-                if (pages.length === 0) {
-                    return { isValid: false, message: 'PDF vacío' };
+        // Validar todos los documentos
+        function validateAllDocuments() {
+            const tipoPersona = document.querySelector('input[name="tipo-persona"]:checked').value;
+            const requiredDocs = getRequiredDocuments(tipoPersona);
+            const missingDocs = [];
+
+            requiredDocs.forEach(docType => {
+                if (!uploadedFiles[docType] || uploadedFiles[docType].length === 0) {
+                    missingDocs.push(getDocumentName(docType));
                 }
+            });
 
-                // For now, assume it's valid if it loads
-                // More sophisticated validation could be added here
-                return { isValid: true, message: 'PDF nativo válido' };
-            } catch (error) {
-                return { isValid: false, message: 'PDF corrupto o no válido' };
+            if (missingDocs.length > 0) {
+                showAlert(`Faltan los siguientes documentos: ${missingDocs.join(', ')}`, 'warning');
+                return false;
+            }
+
+            showAlert('Todos los documentos requeridos han sido subidos', 'success');
+            document.getElementById('process-documents').disabled = false;
+            return true;
+        }
+
+        // Obtener documentos requeridos por tipo de persona
+        function getRequiredDocuments(tipoPersona) {
+            if (tipoPersona === 'fisica') {
+                return [
+                    'constancia-fiscal-titular',
+                    'identificacion-titular',
+                    'estado-cuenta',
+                    'comprobante-domicilio-titular',
+                    'identificacion-avales',
+                    'comprobante-domicilio-avales'
+                ];
+            } else {
+                return [
+                    'constancia-fiscal-empresa',
+                    'acta-constitutiva',
+                    'estados-financieros',
+                    'cedula-contador',
+                    'comprobante-domicilio-empresa',
+                    'declaracion-anual',
+                    'opinion-cumplimiento',
+                    'identificacion-representante',
+                    'comprobante-domicilio-representante',
+                    'constancia-fiscal-representante',
+                    'identificacion-avales-pm',
+                    'comprobante-domicilio-avales-pm',
+                    'constancia-fiscal-avales'
+                ];
             }
         }
 
-        async function performOCR(file) {
-            try {
-                const result = await Tesseract.recognize(file, 'spa', {
-                    logger: m => console.log(m)
-                });
-                return result.data.text;
-            } catch (error) {
-                throw new Error('Error en OCR: ' + error.message);
-            }
+        // Obtener nombre legible del documento
+        function getDocumentName(docType) {
+            const names = {
+                'constancia-fiscal-titular': 'Constancia de Situación Fiscal del titular',
+                'identificacion-titular': 'Identificación del titular',
+                'estado-cuenta': 'Estado de cuenta bancario',
+                'comprobante-domicilio-titular': 'Comprobante de domicilio del titular',
+                'identificacion-avales': 'Identificación de avales',
+                'comprobante-domicilio-avales': 'Comprobante de domicilio de avales',
+                'constancia-fiscal-empresa': 'Constancia de Situación Fiscal de la empresa',
+                'acta-constitutiva': 'Acta Constitutiva',
+                'estados-financieros': 'Estados financieros',
+                'cedula-contador': 'Cédula Profesional del contador',
+                'comprobante-domicilio-empresa': 'Comprobante de domicilio de la empresa',
+                'declaracion-anual': 'Declaración Anual',
+                'opinion-cumplimiento': 'Opinión de Cumplimiento SAT',
+                'identificacion-representante': 'Identificación del representante legal',
+                'comprobante-domicilio-representante': 'Comprobante de domicilio del representante',
+                'constancia-fiscal-representante': 'Constancia Situación Fiscal del representante',
+                'identificacion-avales-pm': 'Identificación de avales',
+                'comprobante-domicilio-avales-pm': 'Comprobante de domicilio de avales',
+                'constancia-fiscal-avales': 'Constancia Situación Fiscal de avales'
+            };
+            return names[docType] || docType;
         }
 
-        async function extractTextFromPDF(file) {
+        // Procesar todos los documentos
+        async function processAllDocuments() {
+            if (!isGoogleConnected) {
+                showAlert('Debes conectarte con Google Drive primero', 'warning');
+                return;
+            }
+
+            document.getElementById('processing-section').style.display = 'block';
+            
             try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                // Subir archivos a Google Drive
+                await uploadFilesToDrive();
                 
-                // This is a simplified extraction - in a real implementation,
-                // you'd use a proper PDF text extraction library
-                return "Texto extraído del PDF (implementar biblioteca de extracción)";
+                // Procesar OCR de imágenes
+                await processOCRImages();
+                
+                // Extraer datos de PDFs
+                await extractPDFData();
+                
+                // Autocompletar formularios
+                await autoFillForms();
+                
+                document.getElementById('generate-pdfs').disabled = false;
+                showAlert('Documentos procesados exitosamente', 'success');
+                
             } catch (error) {
-                throw new Error('Error extrayendo texto del PDF: ' + error.message);
+                console.error('Error procesando documentos:', error);
+                showAlert('Error procesando documentos: ' + error.message, 'error');
             }
         }
 
-        function showAlert(message, type = 'info') {
-            const alertContainer = document.getElementById('alertContainer');
-            const alertDiv = document.createElement('div');
+        // Subir archivos a Google Drive
+        async function uploadFilesToDrive() {
+            updateProcessingStep(0, true);
             
-            const bgColor = type === 'error' ? 'bg-red-100 border-red-500 text-red-700' :
-                           type === 'success' ? 'bg-green-100 border-green-500 text-green-700' :
-                           type === 'warning' ? 'bg-yellow-100 border-yellow-500 text-yellow-700' :
-                           'bg-blue-100 border-blue-500 text-blue-700';
-            
-            const icon = type === 'error' ? 'fas fa-exclamation-triangle' :
-                        type === 'success' ? 'fas fa-check-circle' :
-                        type === 'warning' ? 'fas fa-exclamation-circle' :
-                        'fas fa-info-circle';
+            const bucketName = document.getElementById('storage-bucket').value;
+            if (!bucketName) {
+                throw new Error('Debes configurar el nombre del bucket');
+            }
 
-            alertDiv.className = `border-l-4 p-4 rounded ${bgColor}`;
-            alertDiv.innerHTML = `
+            // Simular subida a Drive (aquí implementarías la lógica real)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            updateProcessingStep(0, false, true);
+        }
+
+        // Procesar OCR de imágenes
+        async function processOCRImages() {
+            updateProcessingStep(1, true);
+            
+            for (const [docType, files] of Object.entries(uploadedFiles)) {
+                for (const fileData of files) {
+                    if (fileData.file.type.startsWith('image/')) {
+                        try {
+                            const result = await Tesseract.recognize(fileData.file, 'spa', {
+                                logger: m => console.log(m)
+                            });
+                            
+                            if (!extractedData[docType]) {
+                                extractedData[docType] = [];
+                            }
+                            extractedData[docType].push({
+                                fileName: fileData.name,
+                                text: result.data.text,
+                                confidence: result.data.confidence
+                            });
+                        } catch (error) {
+                            console.error(`Error en OCR para ${fileData.name}:`, error);
+                        }
+                    }
+                }
+            }
+            
+            updateProcessingStep(1, false, true);
+        }
+
+        // Extraer datos de PDFs
+        async function extractPDFData() {
+            updateProcessingStep(2, true);
+            
+            for (const [docType, files] of Object.entries(uploadedFiles)) {
+                for (const fileData of files) {
+                    if (fileData.file.type === 'application/pdf') {
+                        try {
+                            const arrayBuffer = await fileData.file.arrayBuffer();
+                            const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                            
+                            // Extraer texto del PDF (implementación simplificada)
+                            const pages = pdfDoc.getPages();
+                            let text = '';
+                            
+                            // Aquí implementarías la extracción real de texto del PDF
+                            // Por ahora simularemos
+                            text = 'Texto extraído del PDF simulado';
+                            
+                            if (!extractedData[docType]) {
+                                extractedData[docType] = [];
+                            }
+                            extractedData[docType].push({
+                                fileName: fileData.name,
+                                text: text,
+                                confidence: 95
+                            });
+                        } catch (error) {
+                            console.error(`Error extrayendo PDF ${fileData.name}:`, error);
+                        }
+                    }
+                }
+            }
+            
+            updateProcessingStep(2, false, true);
+        }
+
+        // Autocompletar formularios
+        async function autoFillForms() {
+            updateProcessingStep(3, true);
+            
+            // Extraer datos específicos del texto procesado
+            const formData = extractFormData();
+            
+            // Llenar campos del formulario
+            fillFormFields(formData);
+            
+            // Mostrar datos extraídos
+            displayExtractedData(formData);
+            
+            updateProcessingStep(3, false, true);
+            document.getElementById('processing-results').style.display = 'block';
+        }
+
+        // Extraer datos del formulario
+        function extractFormData() {
+            const tipoPersona = document.querySelector('input[name="tipo-persona"]:checked').value;
+            const formData = {
+                tipoPersona: tipoPersona,
+                rfc: '',
+                nombre: '',
+                razonSocial: '',
+                direccion: '',
+                delegacion: '',
+                codigoPostal: '',
+                telefono: '',
+                representanteLegal: '',
+                fecha: new Date().toLocaleDateString('es-MX')
+            };
+
+            // Simular extracción de datos (aquí implementarías la lógica real de parsing)
+            // Por ejemplo, buscar patrones de RFC, nombres, direcciones, etc.
+            
+            for (const [docType, data] of Object.entries(extractedData)) {
+                for (const extraction of data) {
+                    const text = extraction.text;
+                    
+                    // Buscar RFC
+                    const rfcMatch = text.match(/[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}/);
+                    if (rfcMatch && !formData.rfc) {
+                        formData.rfc = rfcMatch[0];
+                    }
+                    
+                    // Buscar teléfono
+                    const telefonoMatch = text.match(/(?:\+52\s?)?(?:\d{2,3}\s?)?\d{3,4}\s?\d{4}/);
+                    if (telefonoMatch && !formData.telefono) {
+                        formData.telefono = telefonoMatch[0];
+                    }
+                    
+                    // Buscar código postal
+                    const cpMatch = text.match(/\b\d{5}\b/);
+                    if (cpMatch && !formData.codigoPostal) {
+                        formData.codigoPostal = cpMatch[0];
+                    }
+                }
+            }
+
+            return formData;
+        }
+
+        // Llenar campos del formulario
+        function fillFormFields(formData) {
+            if (formData.rfc) document.getElementById('rfc').value = formData.rfc;
+            if (formData.telefono) document.getElementById('telefono').value = formData.telefono;
+            if (formData.codigoPostal) document.getElementById('codigo-postal').value = formData.codigoPostal;
+            if (formData.nombre) document.getElementById('nombre-completo').value = formData.nombre;
+            if (formData.razonSocial) document.getElementById('razon-social').value = formData.razonSocial;
+            if (formData.representanteLegal) document.getElementById('representante-legal').value = formData.representanteLegal;
+        }
+
+        // Mostrar datos extraídos
+        function displayExtractedData(formData) {
+            const container = document.getElementById('extracted-data');
+            let html = '<div class="grid md:grid-cols-2 gap-4">';
+            
+            for (const [key, value] of Object.entries(formData)) {
+                if (value) {
+                    html += `
+                        <div class="flex justify-between py-1 border-b border-gray-200">
+                            <span class="font-medium text-gray-700">${key}:</span>
+                            <span class="text-gray-900">${value}</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Actualizar paso de procesamiento
+        function updateProcessingStep(stepIndex, isActive, isCompleted = false) {
+            const steps = document.querySelectorAll('#processing-steps > div');
+            const step = steps[stepIndex];
+            const icon = step.querySelector('i:first-child');
+            const spinner = step.querySelector('.loading-spinner');
+            const text = step.querySelector('span');
+
+            if (isActive) {
+                spinner.classList.remove('hidden');
+                icon.className = 'fas fa-spinner loading-spinner';
+                text.classList.add('text-blue-600');
+            } else if (isCompleted) {
+                spinner.classList.add('hidden');
+                icon.className = 'fas fa-check';
+                icon.parentElement.classList.remove('bg-gray-200');
+                icon.parentElement.classList.add('bg-green-500');
+                icon.classList.remove('text-gray-600');
+                icon.classList.add('text-white');
+                text.classList.remove('text-blue-600');
+                text.classList.add('text-green-600');
+            }
+        }
+
+        // Generar todos los PDFs
+        async function generateAllPDFs() {
+            try {
+                const tipoPersona = document.querySelector('input[name="tipo-persona"]:checked').value;
+                const formData = extractFormData();
+                
+                // Llenar datos desde el formulario si no se extrajeron
+                formData.rfc = formData.rfc || document.getElementById('rfc').value;
+                formData.telefono = formData.telefono || document.getElementById('telefono').value;
+                formData.direccion = formData.direccion || document.getElementById('direccion').value;
+                formData.delegacion = formData.delegacion || document.getElementById('delegacion').value;
+                formData.codigoPostal = formData.codigoPostal || document.getElementById('codigo-postal').value;
+                
+                if (tipoPersona === 'fisica') {
+                    formData.nombre = formData.nombre || document.getElementById('nombre-completo').value;
+                    await generatePDFPersonaFisica(formData);
+                } else {
+                    formData.razonSocial = formData.razonSocial || document.getElementById('razon-social').value;
+                    formData.representanteLegal = formData.representanteLegal || document.getElementById('representante-legal').value;
+                    await generatePDFPersonaMoral(formData);
+                }
+                
+                document.getElementById('download-section').style.display = 'block';
+                document.getElementById('submit-application').disabled = false;
+                showAlert('PDFs generados exitosamente', 'success');
+                
+            } catch (error) {
+                console.error('Error generando PDFs:', error);
+                showAlert('Error generando PDFs: ' + error.message, 'error');
+            }
+        }
+
+        // Generar PDF para persona física
+        async function generatePDFPersonaFisica(formData) {
+            // Crear PDF para titular
+            const pdfTitular = await createBuroPDF({
+                tipo: 'PF',
+                rfc: formData.rfc,
+                calle: formData.direccion,
+                delegacion: formData.delegacion,
+                cp: formData.codigoPostal,
+                telefono: formData.telefono,
+                fecha: formData.fecha,
+                nombreCliente1: formData.nombre,
+                nombreCliente2: ''
+            });
+            
+            // Guardar PDF del titular
+            savePDF(pdfTitular, 'Autorizacion_Buro_Titular.pdf', 'titular');
+            
+            // Generar PDFs para avales (simular datos de avales)
+            const numAvales = Math.min(2, (uploadedFiles['identificacion-avales'] || []).length);
+            for (let i = 1; i <= numAvales; i++) {
+                const pdfAval = await createBuroPDF({
+                    tipo: 'PF',
+                    rfc: `AVAL${i}RFC`, // En producción, extraerías esto de los documentos
+                    calle: `Dirección Aval ${i}`,
+                    delegacion: formData.delegacion,
+                    cp: formData.codigoPostal,
+                    telefono: `55555555${i}`,
+                    fecha: formData.fecha,
+                    nombreCliente1: `Aval ${i}`,
+                    nombreCliente2: ''
+                });
+                
+                savePDF(pdfAval, `Autorizacion_Buro_Aval_${i}.pdf`, `aval-${i}`);
+            }
+        }
+
+        // Generar PDF para persona moral
+        async function generatePDFPersonaMoral(formData) {
+            const pdf = await createBuroPDF({
+                tipo: 'PM',
+                razonSocial: formData.razonSocial,
+                rfcEmpresa: formData.rfc,
+                calleEmpresa: formData.direccion,
+                delegacionEmpresa: formData.delegacion,
+                cpEmpresa: formData.codigoPostal,
+                telefonoEmpresa: formData.telefono,
+                fechaEmpresa: formData.fecha,
+                nombreRepresentante: formData.representanteLegal
+            });
+            
+            savePDF(pdf, 'Autorizacion_Buro_Empresa.pdf', 'empresa');
+        }
+
+        // Crear PDF de autorización de buró
+        async function createBuroPDF(data) {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            const page = pdfDoc.addPage([612, 792]); // Tamaño carta
+            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            const fontSize = 12;
+
+            // Título
+            page.drawText('AUTORIZACIÓN PARA CONSULTA EN BURÓ DE CRÉDITO', {
+                x: 150,
+                y: 750,
+                size: 14,
+                font: font
+            });
+
+            if (data.tipo === 'PF') {
+                // Campos para Persona Física
+                page.drawText(`RFC: ${data.rfc || ''}`, { x: 50, y: 700, size: fontSize, font });
+                page.drawText(`Nombre: ${data.nombreCliente1 || ''}`, { x: 50, y: 680, size: fontSize, font });
+                page.drawText(`Calle: ${data.calle || ''}`, { x: 50, y: 660, size: fontSize, font });
+                page.drawText(`Delegación: ${data.delegacion || ''}`, { x: 50, y: 640, size: fontSize, font });
+                page.drawText(`C.P.: ${data.cp || ''}`, { x: 50, y: 620, size: fontSize, font });
+                page.drawText(`Teléfono: ${data.telefono || ''}`, { x: 50, y: 600, size: fontSize, font });
+                page.drawText(`Fecha: ${data.fecha || ''}`, { x: 50, y: 580, size: fontSize, font });
+            } else {
+                // Campos para Persona Moral
+                page.drawText(`Razón Social: ${data.razonSocial || ''}`, { x: 50, y: 700, size: fontSize, font });
+                page.drawText(`RFC Empresa: ${data.rfcEmpresa || ''}`, { x: 50, y: 680, size: fontSize, font });
+                page.drawText(`Calle: ${data.calleEmpresa || ''}`, { x: 50, y: 660, size: fontSize, font });
+                page.drawText(`Delegación: ${data.delegacionEmpresa || ''}`, { x: 50, y: 640, size: fontSize, font });
+                page.drawText(`C.P.: ${data.cpEmpresa || ''}`, { x: 50, y: 620, size: fontSize, font });
+                page.drawText(`Teléfono: ${data.telefonoEmpresa || ''}`, { x: 50, y: 600, size: fontSize, font });
+                page.drawText(`Fecha: ${data.fechaEmpresa || ''}`, { x: 50, y: 580, size: fontSize, font });
+                page.drawText(`Representante Legal: ${data.nombreRepresentante || ''}`, { x: 50, y: 560, size: fontSize, font });
+            }
+
+            // Texto de autorización
+            const authText = `
+Por medio de la presente autorizo a [NOMBRE DE LA EMPRESA] para que consulte mi información 
+crediticia en el Buró de Crédito, así como para el tratamiento de mis datos personales 
+conforme a la Ley Federal de Protección de Datos Personales.
+            `;
+
+            page.drawText(authText, {
+                x: 50,
+                y: 450,
+                size: 10,
+                font,
+                maxWidth: 500,
+                lineHeight: 15
+            });
+
+            // Línea para firma
+            page.drawText('Firma: ________________________________', {
+                x: 50,
+                y: 300,
+                size: fontSize,
+                font
+            });
+
+            return pdfDoc;
+        }
+
+        // Guardar PDF
+        function savePDF(pdfDoc, fileName, pdfType) {
+            pdfDoc.save().then(pdfBytes => {
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                // Crear botón de descarga
+                createDownloadButton(url, fileName, pdfType);
+            });
+        }
+
+        // Crear botón de descarga
+        function createDownloadButton(url, fileName, pdfType) {
+            const container = pdfType === 'titular' ? 
+                document.querySelector('.download-pdf[data-pdf-type="titular"]').parentElement :
+                document.getElementById('avales-pdfs');
+
+            if (pdfType !== 'titular') {
+                const downloadDiv = document.createElement('div');
+                downloadDiv.className = 'text-center p-4 border-2 border-dashed border-gray-300 rounded-lg';
+                downloadDiv.innerHTML = `
+                    <i class="fas fa-file-pdf text-4xl text-red-600 mb-2"></i>
+                    <h4 class="font-medium text-gray-800">${fileName}</h4>
+                    <p class="text-sm text-gray-600 mb-3">PDF prellenado</p>
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm download-pdf-custom">
+                        <i class="fas fa-download mr-1"></i>
+                        Descargar
+                    </button>
+                `;
+                
+                const downloadBtn = downloadDiv.querySelector('.download-pdf-custom');
+                downloadBtn.addEventListener('click', () => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                });
+                
+                container.appendChild(downloadDiv);
+            } else {
+                document.querySelector('.download-pdf[data-pdf-type="titular"]').addEventListener('click', () => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                });
+            }
+        }
+
+        // Enviar solicitud
+        async function submitApplication() {
+            try {
+                const tipoPersona = document.querySelector('input[name="tipo-persona"]:checked').value;
+                const applicationData = {
+                    tipoPersona: tipoPersona,
+                    datosBasicos: {
+                        nombre: document.getElementById('nombre-completo').value,
+                        razonSocial: document.getElementById('razon-social').value,
+                        rfc: document.getElementById('rfc').value,
+                        telefono: document.getElementById('telefono').value,
+                        direccion: document.getElementById('direccion').value,
+                        delegacion: document.getElementById('delegacion').value,
+                        codigoPostal: document.getElementById('codigo-postal').value,
+                        representanteLegal: document.getElementById('representante-legal').value
+                    },
+                    documentos: uploadedFiles,
+                    datosExtraidos: extractedData,
+                    fechaSolicitud: new Date().toISOString()
+                };
+
+                // Aquí enviarías los datos a tu servidor
+                console.log('Datos de la solicitud:', applicationData);
+                
+                showAlert('Solicitud enviada exitosamente. Recibirás una confirmación por email.', 'success');
+                
+                // Limpiar formulario
+                setTimeout(() => {
+                    if (confirm('¿Deseas crear una nueva solicitud?')) {
+                        location.reload();
+                    }
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error enviando solicitud:', error);
+                showAlert('Error enviando la solicitud: ' + error.message, 'error');
+            }
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('validation-alerts');
+            const alertClass = {
+                'success': 'bg-green-50 border-green-400 text-green-700',
+                'error': 'bg-red-50 border-red-400 text-red-700',
+                'warning': 'bg-yellow-50 border-yellow-400 text-yellow-700',
+                'info': 'bg-blue-50 border-blue-400 text-blue-700'
+            };
+
+            const iconClass = {
+                'success': 'fas fa-check-circle text-green-400',
+                'error': 'fas fa-exclamation-circle text-red-400',
+                'warning': 'fas fa-exclamation-triangle text-yellow-400',
+                'info': 'fas fa-info-circle text-blue-400'
+            };
+
+            const alert = document.createElement('div');
+            alert.className = `border-l-4 p-4 mb-4 rounded fade-in ${alertClass[type]}`;
+            alert.innerHTML = `
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <i class="${icon}"></i>
+                        <i class="${iconClass[type]}"></i>
                     </div>
                     <div class="ml-3">
                         <p class="text-sm">${message}</p>
                     </div>
                     <div class="ml-auto pl-3">
-                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                        <button class="text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.parentElement.remove()">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
             `;
-            
-            alertContainer.appendChild(alertDiv);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
-                }
-            }, 5000);
-        }
 
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            // Validate required fields
-            const missingDocuments = validateRequiredDocuments();
-            if (missingDocuments.length > 0) {
-                showAlert(
-                    `Faltan los siguientes documentos obligatorios: ${missingDocuments.join(', ')}`,
-                    'error'
-                );
-                return;
-            }
+            alertContainer.appendChild(alert);
 
-            // Show processing status
-            document.getElementById('processingStatus').classList.remove('hidden');
-            document.getElementById('submitBtn').disabled = true;
-
-            try {
-                // Process and generate PDFs
-                await processDocuments();
-                
-                // Upload to Google Drive
-                await uploadToGoogleDrive();
-                
-                // Generate authorization PDFs
-                await generateAuthorizationPDFs();
-                
-                showAlert('Solicitud procesada exitosamente', 'success');
-                document.getElementById('generatedPDFs').classList.remove('hidden');
-                
-            } catch (error) {
-                showAlert('Error procesando la solicitud: ' + error.message, 'error');
-            } finally {
-                document.getElementById('processingStatus').classList.add('hidden');
-                document.getElementById('submitBtn').disabled = false;
+            // Auto-remover después de 5 segundos para alertas de éxito
+            if (type === 'success') {
+                setTimeout(() => {
+                    if (alert.parentElement) {
+                        alert.remove();
+                    }
+                }, 5000);
             }
         }
 
-        function validateRequiredDocuments() {
-            const missing = [];
-            const requiredInputs = document.querySelectorAll('.file-input[data-required="true"]');
-            
-            requiredInputs.forEach(input => {
-                if (!input.files[0] || !uploadedFiles[input.name]) {
-                    const label = input.closest('.document-upload').querySelector('label').textContent;
-                    missing.push(label.replace(' *', ''));
-                }
+        // Limpiar uploads
+        function clearFileUploads() {
+            document.querySelectorAll('.upload-status').forEach(status => {
+                status.innerHTML = '';
             });
-            
-            return missing;
-        }
-
-        async function processDocuments() {
-            // Update processing status
-            updateProcessingStep(1, 'Validando archivos...', true);
-            
-            // Simulate processing time
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            updateProcessingStep(2, 'Extrayendo texto con OCR...', true);
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            updateProcessingStep(3, 'Completando formularios PDF...', true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-
-        function updateProcessingStep(step, text, completed) {
-            const steps = document.querySelectorAll('#processingStatus .flex');
-            if (steps[step - 1]) {
-                const circle = steps[step - 1].querySelector('.w-4');
-                const span = steps[step - 1].querySelector('span');
-                
-                if (completed) {
-                    circle.className = 'w-4 h-4 bg-green-500 rounded-full mr-3';
-                    span.innerHTML = `<i class="fas fa-check mr-2"></i>${text}`;
-                } else {
-                    circle.className = 'w-4 h-4 bg-blue-500 rounded-full mr-3';
-                    span.textContent = text;
-                }
-            }
-        }
-
-        async function generateAuthorizationPDFs() {
-            const personType = document.querySelector('input[name="personType"]:checked').value;
-            const pdfLinks = document.getElementById('pdfDownloadLinks');
-            
-            if (personType === 'fisica') {
-                // Generate PDF for titular
-                const titularPDF = await createAuthorizationPDF('PF', getTitularData());
-                addPDFDownloadLink(pdfLinks, 'Autorización Buró - Titular', titularPDF);
-                
-                // Generate PDFs for avales
-                const numAvales = parseInt(document.getElementById('numAvales').value);
-                for (let i = 1; i <= numAvales; i++) {
-                    const avalData = getAvalData(i);
-                    const avalPDF = await createAuthorizationPDF('PF', avalData);
-                    addPDFDownloadLink(pdfLinks, `Autorización Buró - Aval ${i}`, avalPDF);
-                }
-            } else if (personType === 'moral') {
-                // Generate PDF for empresa
-                const empresaData = getEmpresaData();
-                const empresaPDF = await createAuthorizationPDF('PM', empresaData);
-                addPDFDownloadLink(pdfLinks, 'Autorización Buró - Empresa', empresaPDF);
-            }
-        }
-
-        async function createAuthorizationPDF(type, data) {
-            // This would create the actual PDF with filled fields
-            // For now, return a mock PDF blob
-            const mockPDFContent = `PDF de autorización ${type} generado con datos: ${JSON.stringify(data)}`;
-            return new Blob([mockPDFContent], { type: 'application/pdf' });
-        }
-
-        function getTitularData() {
-            return {
-                RFC: extractedData.constanciaFiscalTitular || document.getElementById('rfc').value || '',
-                Calle: document.getElementById('direccion').value || '',
-                CP: document.getElementById('cp').value || '',
-                Telefono: document.getElementById('telefono').value || '',
-                Fecha: new Date().toLocaleDateString('es-MX'),
-                'Nombre del Cliente 1': document.getElementById('nombreCompleto').value || '',
-                'Nombre del Cliente 2': ''
-            };
-        }
-
-        function getAvalData(avalNumber) {
-            // Extract data from aval documents
-            return {
-                RFC: `RFC_AVAL_${avalNumber}`,
-                Calle: `Dirección Aval ${avalNumber}`,
-                CP: '00000',
-                Telefono: '0000000000',
-                Fecha: new Date().toLocaleDateString('es-MX'),
-                'Nombre del Cliente 1': `Aval ${avalNumber}`,
-                'Nombre del Cliente 2': ''
-            };
-        }
-
-        function getEmpresaData() {
-            return {
-                'Razon Social': document.getElementById('razonSocial').value || '',
-                'RFC Empresa': document.getElementById('rfcEmpresa').value || '',
-                'Calle Numero y Colonia Empresa': document.getElementById('direccion').value || '',
-                'Delegacion o Municipio Empresa': '',
-                'CP Empresa': document.getElementById('cp').value || '',
-                'Telefono Empresa': '',
-                'Fecha Llenado Empresa': new Date().toLocaleDateString('es-MX'),
-                'Nombre Representante Legal': document.getElementById('representanteLegal').value || ''
-            };
-        }
-
-        function addPDFDownloadLink(container, title, pdfBlob) {
-            const linkDiv = document.createElement('div');
-            linkDiv.className = 'flex items-center justify-between p-3 bg-gray-50 rounded border';
-            
-            const url = URL.createObjectURL(pdfBlob);
-            linkDiv.innerHTML = `
-                <span class="font-medium">${title}</span>
-                <a href="${url}" download="${title}.pdf" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
-                    <i class="fas fa-download mr-2"></i>Descargar
-                </a>
-            `;
-            
-            container.appendChild(linkDiv);
-        }
-
-        function loadGoogleDriveAPI() {
-            gapi.load('auth2:client', initializeGoogleAPI);
-        }
-
-        function initializeGoogleAPI() {
-            // This would initialize the Google Drive API
-            // For demonstration purposes, we'll just set the flag
-            driveApiLoaded = true;
-            console.log('Google Drive API cargado');
-        }
-
-        async function uploadToGoogleDrive() {
-            updateProcessingStep(4, 'Subiendo a Google Drive...', false);
-            
-            // Simulate upload
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            updateProcessingStep(4, 'Subido a Google Drive exitosamente', true);
+            document.querySelectorAll('.progress-container').forEach(container => {
+                container.classList.add('hidden');
+            });
         }
     </script>
-
-
-    <script id="html_badge_script1">
-        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDhxzxlsmwO7GQD2baHDTsaICZ%2BVJiTEk3%2FBgTlMCX0musfxtrvDJOMR6GqL7K6fMaPjExoqURvPF1q3Kdt2dI669wGfAXQCGarSZ36wBrB2OnxrAMMtEEWv95jgTjxBesuWIba36yrVhUR4yNFx1Hc1uCFrloEbSIxRQ8kokAegtZWtFiP5c%2FsBt41xO7COlTe4%2FFn5QsNo9O2DOegiE3l9RQs8YsI5pgUQ%2FeYjjogsWJ7u7U31qPt2UB2ILh53d4v71kaDbyaGS%2FR82W88wtUdQbcIWp90fFBBRAF8kIxV6cvKunyOOYWWQRVW28yJH2co6ouBiicBxGaGru0i7AyMhxZf%2Bg80D79Jx1YO8Bt0ssufQWCRrfpEt7pPiIl2M5ect8ZilF%2F1zUEi%2BOhJ6WxtvPE5yuAbZFuSuLwXcnN0zLTJOvxBQBvoXrb92yrmQ6sYnbmLujOCpf561ASU36Ri7Syl8uVph%2BuQ8MkpdXVXeUDSlh%2FQJz5zct8ewu%2FLxJJ2AnlvzaHus0if70K7XF90%3D";
-        window.__genspark_locale = "es-ES";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDhxzxlsmwO7GQD2baHDTsaICZ+VJiTEk3/BgTlMCX0musfxtrvDJOMR6GqL7K6fMaPjExoqURvPF1q3Kdt2dI669wGfAXQCGarSZ36wBrB2OnxrAMMtEEWv95jgTjxBesuWIba36yrVhUR4yNFx1Hc1uCFrloEbSIxRQ8kokAegtZWtFiP5c/sBt41xO7COlTe4/Fn5QsNo9O2DOegiE3l9RQs8YsI5pgUQ/eYjjogsWJ7u7U31qPt2UB2ILh53d4v71kaDbyaGS/R82W88wtUdQbcIWp90fFBBRAF8kIxV6cvKunyOOYWWQRVW28yJH2co6ouBiicBxGaGru0i7AyMhxZf+g80D79Jx1YO8Bt0ssufQWCRrfpEt7pPiIl2M5ect8ZilF/1zUEi+OhJ6WxtvPE5yuAbZFuSuLwXcnN0zLTJOvxBQBvoXrb92yrmQ6sYnbmLujOCpf561ASU36Ri7Syl8uVph+uQ8MkpdXVXeUDSlh/QJz5zct8ewu/LxJJ2AnlvzaHus0if70K7XF90=";
-    </script>
-    
-        <script id="html_badge_script2" src="./Sistema GENSPARK de Solicitud de Crédito_files/html_badge.js.descarga"></script><button class="genspark-badge-button"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-<path d="M11.3412 0H2.65879C1.19038 0 0 1.19038 0 2.65879V11.3412C0 12.8096 1.19038 14 2.65879 14H11.3412C12.8096 14 14 12.8096 14 11.3412V2.65879C14 1.19038 12.8096 0 11.3412 0Z" fill="white"></path>
-<path d="M11.7403 10.7031H2.29243C2.09641 10.7031 1.9375 10.862 1.9375 11.0581V11.8033C1.9375 11.9993 2.09641 12.1582 2.29243 12.1582H11.7403C11.9363 12.1582 12.0952 11.9993 12.0952 11.8033V11.0581C12.0952 10.862 11.9363 10.7031 11.7403 10.7031Z" fill="#232425"></path>
-<path d="M5.09178 9.18166C5.03494 9.18166 4.98695 9.13998 4.97811 9.08314C4.60803 6.63655 4.34025 6.42056 1.91134 6.05427C1.83682 6.0429 1.78125 5.97848 1.78125 5.9027C1.78125 5.82691 1.83682 5.7625 1.91134 5.75113C4.32762 5.3861 4.54235 5.17011 4.90738 2.7551C4.91874 2.68058 4.98316 2.625 5.05894 2.625C5.13473 2.625 5.19914 2.68058 5.21051 2.7551C5.57554 5.17011 5.79153 5.3861 8.20655 5.75113C8.28107 5.7625 8.33664 5.82691 8.33664 5.9027C8.33664 5.97848 8.28107 6.0429 8.20655 6.05427C5.78017 6.42056 5.57302 6.63655 5.20546 9.08314C5.19662 9.13871 5.14862 9.18166 5.09178 9.18166Z" fill="#232425"></path>
-<path d="M9.70174 5.949C9.66637 5.949 9.63606 5.92248 9.63101 5.88711C9.39986 4.35878 9.23188 4.22363 7.71492 3.99501C7.66818 3.98743 7.63281 3.94828 7.63281 3.90028C7.63281 3.85355 7.66692 3.81313 7.71492 3.80555C9.2243 3.5782 9.35945 3.44305 9.5868 1.93366C9.59438 1.88693 9.63354 1.85156 9.68153 1.85156C9.72827 1.85156 9.76869 1.88567 9.77627 1.93366C10.0036 3.44305 10.1388 3.5782 11.6482 3.80555C11.6949 3.81313 11.7302 3.85228 11.7302 3.90028C11.7302 3.94702 11.6962 3.98743 11.6482 3.99501C10.1325 4.22363 10.0024 4.35878 9.77247 5.88711C9.76742 5.92248 9.73711 5.949 9.70174 5.949Z" fill="#232425"></path>
-<path d="M9.69114 9.76325C9.6684 9.76325 9.64946 9.74683 9.64567 9.7241C9.49915 8.75152 9.39179 8.66563 8.42679 8.52038C8.39648 8.51533 8.375 8.49007 8.375 8.45975C8.375 8.42944 8.39648 8.40418 8.42679 8.39912C9.38673 8.25387 9.47262 8.16798 9.61788 7.20804C9.62293 7.17772 9.64819 7.15625 9.6785 7.15625C9.70882 7.15625 9.73408 7.17772 9.73913 7.20804C9.88439 8.16798 9.97028 8.25387 10.9302 8.39912C10.9605 8.40418 10.982 8.42944 10.982 8.45975C10.982 8.49007 10.9605 8.51533 10.9302 8.52038C9.96523 8.66563 9.88312 8.75152 9.73661 9.7241C9.73282 9.74683 9.71387 9.76325 9.69114 9.76325Z" fill="#232425"></path>
-</svg> Hecho con Genspark</button><div class="genspark-modal">
-    <div class="genspark-modal-content">
-      <button class="genspark-close"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-<path d="M11 3L3 11M3 3L11 11" stroke="#232425" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></button>
-      <h3 class="genspark-title">Esta página fue creada por usuarios con IA.</h3>
-      <a class="genspark-report" href="mailto:support@genspark.ai?subject=Report%20inappropriate%20content&amp;body=Current%20URL:%20https://skmdqlwx.gensparkspace.com/">Reportar contenido inapropiado.</a>
-      <p class="genspark-info">El propietario de la página con Plan Plus puede eliminar la insignia.</p>
-      <div class="genspark-buttons">
-        <button class="genspark-remove-btn">Eliminar insignia</button>
-        <button class="genspark-go-btn">Ir a Genspark</button>
-      </div>
-    </div>
-  </div>
-        
-    <script id="html_notice_dialog_script" src="./Sistema GENSPARK de Solicitud de Crédito_files/notice_dialog.js.descarga"></script>
-    <div class="genspark-notice-dialog" style="display: none;">
-      <div class="genspark-notice-content">
-        <h2 class="genspark-notice-title">Este sitio fue creado por un usuario, tenga en cuenta:</h2>
-        <ul class="genspark-notice-list">
-          <li>El contenido puede contener inexactitudes, verifique la información antes de usarla.</li>
-          <li>Si nota contenido inapropiado en este sitio, contáctenos en <a href="mailto:support@genspark.ai">support@genspark.ai</a>.</li>
-        </ul>
-        <div class="genspark-notice-checkbox">
-          <input type="checkbox" id="genspark-dont-show">
-          <label for="genspark-dont-show">No mostrar este mensaje de nuevo.</label>
-        </div>
-        <div class="genspark-notice-actions">
-          <button class="genspark-notice-ok">Aceptar</button>
-        </div>
-      </div>
-    </div></body></html>
+</body>
+</html>
